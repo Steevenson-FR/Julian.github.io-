@@ -3,33 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RomanScript - Portfolio Scénariste</title>
+    <title>RomanScript - Plateforme Collaborative d'Écrivains</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app">
+        <!-- Navigation -->
         <nav class="navbar">
             <div class="nav-content">
                 <h1 class="nav-logo" onclick="showHome()">RomanScript</h1>
-                <div class="nav-links">
-                    <button class="nav-link active" onclick="showHome()">Accueil</button>
-                    <button class="nav-link" onclick="showCategory('films')">Films</button>
-                    <button class="nav-link" onclick="showCategory('series')">Séries</button>
-                    <button class="nav-link" onclick="showCategory('documentaires')">Documentaires</button>
+                <div class="nav-center">
+                    <div class="nav-links" id="main-nav">
+                        <button class="nav-link active" onclick="showHome()">Accueil</button>
+                        <button class="nav-link" onclick="showCategory('films')">Films</button>
+                        <button class="nav-link" onclick="showCategory('series')">Séries</button>
+                        <button class="nav-link" onclick="showCategory('documentaires')">Documentaires</button>
+                        <button class="nav-link" onclick="showCategory('romans')">Romans</button>
+                    </div>
+                </div>
+                <div class="nav-auth">
+                    <div id="auth-buttons">
+                        <button class="auth-btn" onclick="showLogin()">Connexion</button>
+                        <button class="auth-btn primary" onclick="showRegister()">S'inscrire</button>
+                    </div>
+                    <div id="user-menu" style="display: none;">
+                        <span id="user-name">Utilisateur</span>
+                        <button class="auth-btn" onclick="showProfile()">Profil</button>
+                        <button class="auth-btn" onclick="logout()">Déconnexion</button>
+                    </div>
                 </div>
             </div>
         </nav>
 
+        <!-- Contenu Principal -->
         <main class="main-content">
+            
+            <!-- PAGE D'ACCUEIL -->
             <div id="home-page" class="page-content">
                 <div class="home-container">
                     <div class="hero-section">
                         <div class="hero-content">
                             <h1 class="hero-title">RomanScript</h1>
-                            <p class="hero-subtitle">Pour les passionnés d'écriture et de lecture</p>
-                            <div class="author-info">
-                                <h3>Alex Moreau</h3>
-                                <p>Scénariste & Conteur</p>
+                            <p class="hero-subtitle">Plateforme collaborative pour écrivains passionnés</p>
+                            <div class="hero-stats">
+                                <div class="stat-item">
+                                    <span class="stat-number" id="total-works">0</span>
+                                    <span class="stat-label">Œuvres publiées</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number" id="total-writers">0</span>
+                                    <span class="stat-label">Écrivains</span>
+                                </div>
                             </div>
                         </div>
                         <div class="hero-image">
@@ -38,89 +62,217 @@
                     </div>
 
                     <div class="categories-section">
-                        <h2 class="section-title">Explorez nos Créations</h2>
+                        <h2 class="section-title">Explorez par Catégorie</h2>
                         <div class="categories-grid">
                             <div class="category-card" onclick="showCategory('films')">
                                 <div class="category-icon">🎬</div>
                                 <h3>Films</h3>
-                                <p>2 scénarios cinématographiques</p>
+                                <p><span id="films-count">0</span> scénarios</p>
                             </div>
                             <div class="category-card" onclick="showCategory('series')">
                                 <div class="category-icon">📺</div>
                                 <h3>Séries</h3>
-                                <p>2 séries complètes</p>
+                                <p><span id="series-count">0</span> séries</p>
                             </div>
                             <div class="category-card" onclick="showCategory('documentaires')">
                                 <div class="category-icon">🎥</div>
                                 <h3>Documentaires</h3>
-                                <p>2 documentaires immersifs</p>
+                                <p><span id="documentaires-count">0</span> documentaires</p>
+                            </div>
+                            <div class="category-card" onclick="showCategory('romans')">
+                                <div class="category-icon">📚</div>
+                                <h3>Romans</h3>
+                                <p><span id="romans-count">0</span> romans</p>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="about-section">
+                        <h2>Rejoignez notre communauté d'écrivains</h2>
+                        <p>Partagez vos créations, découvrez de nouveaux talents, et faites partie d'une communauté passionnée d'écriture et de storytelling.</p>
+                        <button class="cta-button" onclick="showRegister()">Commencer à publier</button>
                     </div>
                 </div>
             </div>
 
+            <!-- PAGES CATÉGORIES -->
             <div id="films-page" class="page-content" style="display: none;">
-                <div class="category-header">
-                    <button class="back-button" onclick="showHome()">← Retour à l'accueil</button>
-                    <h1 class="category-title">Films</h1>
-                </div>
-                <div class="works-grid">
-                    <div class="work-card" onclick="alert('Cliquez pour voir L\'Encre du Destin')">
-                        <h3>L'Encre du Destin</h3>
-                        <p>Fantastique Romantique - 2024</p>
+                <div class="category-container">
+                    <div class="category-header">
+                        <button class="back-button" onclick="showHome()">← Accueil</button>
+                        <div class="category-title-section">
+                            <h1 class="category-title">Films</h1>
+                            <p class="category-description">Scénarios de films de notre communauté</p>
+                        </div>
+                        <button class="upload-button" onclick="showUploadModal('films')" id="upload-films" style="display: none;">
+                            📝 Publier mon scénario
+                        </button>
                     </div>
-                    <div class="work-card" onclick="alert('Cliquez pour voir Mémoires Perdues')">
-                        <h3>Mémoires Perdues</h3>
-                        <p>Drame Psychologique - 2024</p>
-                    </div>
+                    <div class="works-grid" id="films-works"></div>
                 </div>
             </div>
 
             <div id="series-page" class="page-content" style="display: none;">
-                <div class="category-header">
-                    <button class="back-button" onclick="showHome()">← Retour à l'accueil</button>
-                    <h1 class="category-title">Séries</h1>
-                </div>
-                <div class="works-grid">
-                    <div class="work-card" onclick="alert('Cliquez pour voir La Maison des Écrivains')">
-                        <h3>La Maison des Écrivains</h3>
-                        <p>Comédie Dramatique - 2024</p>
+                <div class="category-container">
+                    <div class="category-header">
+                        <button class="back-button" onclick="showHome()">← Accueil</button>
+                        <div class="category-title-section">
+                            <h1 class="category-title">Séries</h1>
+                            <p class="category-description">Séries créées par notre communauté</p>
+                        </div>
+                        <button class="upload-button" onclick="showUploadModal('series')" id="upload-series" style="display: none;">
+                            📝 Publier ma série
+                        </button>
                     </div>
-                    <div class="work-card" onclick="alert('Cliquez pour voir Chasseurs de Manuscrits')">
-                        <h3>Chasseurs de Manuscrits</h3>
-                        <p>Aventure Littéraire - 2024</p>
-                    </div>
+                    <div class="works-grid" id="series-works"></div>
                 </div>
             </div>
 
             <div id="documentaires-page" class="page-content" style="display: none;">
-                <div class="category-header">
-                    <button class="back-button" onclick="showHome()">← Retour à l'accueil</button>
-                    <h1 class="category-title">Documentaires</h1>
-                </div>
-                <div class="works-grid">
-                    <div class="work-card" onclick="alert('Cliquez pour voir L\'Art de l\'Écriture')">
-                        <h3>L'Art de l'Écriture</h3>
-                        <p>Documentaire Culturel - 2024</p>
+                <div class="category-container">
+                    <div class="category-header">
+                        <button class="back-button" onclick="showHome()">← Accueil</button>
+                        <div class="category-title-section">
+                            <h1 class="category-title">Documentaires</h1>
+                            <p class="category-description">Documentaires de notre communauté</p>
+                        </div>
+                        <button class="upload-button" onclick="showUploadModal('documentaires')" id="upload-documentaires" style="display: none;">
+                            📝 Publier mon documentaire
+                        </button>
                     </div>
-                    <div class="work-card" onclick="alert('Cliquez pour voir Bibliothèques du Monde')">
-                        <h3>Bibliothèques du Monde</h3>
-                        <p>Documentaire Voyage - 2024</p>
-                    </div>
+                    <div class="works-grid" id="documentaires-works"></div>
                 </div>
             </div>
-        </main>
 
-        <footer class="footer">
-            <div class="footer-content">
-                <h3>RomanScript</h3>
-                <p>Pour les passionnés d'écriture et de lecture</p>
-                <p>&copy; 2024 RomanScript. Tous droits réservés.</p>
+            <div id="romans-page" class="page-content" style="display: none;">
+                <div class="category-container">
+                    <div class="category-header">
+                        <button class="back-button" onclick="showHome()">← Accueil</button>
+                        <div class="category-title-section">
+                            <h1 class="category-title">Romans</h1>
+                            <p class="category-description">Romans de notre communauté</p>
+                        </div>
+                        <button class="upload-button" onclick="showUploadModal('romans')" id="upload-romans" style="display: none;">
+                            📝 Publier mon roman
+                        </button>
+                    </div>
+                    <div class="works-grid" id="romans-works"></div>
+                </div>
             </div>
-        </footer>
+
+            <!-- PAGE PROFIL -->
+            <div id="profile-page" class="page-content" style="display: none;">
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <button class="back-button" onclick="showHome()">← Accueil</button>
+                        <h1 class="profile-title">Mon Profil</h1>
+                    </div>
+                    <div class="profile-content">
+                        <div class="profile-info" id="profile-info"></div>
+                        <div class="profile-works" id="profile-works"></div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
     </div>
-    
+
+    <!-- MODAL CONNEXION -->
+    <div id="login-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('login-modal')">&times;</span>
+            <h2>Connexion</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email :</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Mot de passe :</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="submit-btn">Se connecter</button>
+            </form>
+            <p class="switch-form">Pas encore inscrit ? <a href="#" onclick="showRegister()">S'inscrire</a></p>
+        </div>
+    </div>
+
+    <!-- MODAL INSCRIPTION -->
+    <div id="register-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('register-modal')">&times;</span>
+            <h2>Inscription</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="register-name">Nom complet :</label>
+                    <input type="text" id="register-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-pen-name">Pseudonyme d'écrivain :</label>
+                    <input type="text" id="register-pen-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email :</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Mot de passe :</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-bio">Bio (optionnelle) :</label>
+                    <textarea id="register-bio" placeholder="Parlez-nous de votre parcours d'écrivain..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">S'inscrire</button>
+            </form>
+            <p class="switch-form">Déjà inscrit ? <a href="#" onclick="showLogin()">Se connecter</a></p>
+        </div>
+    </div>
+
+    <!-- MODAL UPLOAD -->
+    <div id="upload-modal" class="modal" style="display: none;">
+        <div class="modal-content large">
+            <span class="close" onclick="closeModal('upload-modal')">&times;</span>
+            <h2 id="upload-title">Publier une œuvre</h2>
+            <form id="upload-form">
+                <div class="form-group">
+                    <label for="work-title">Titre de l'œuvre :</label>
+                    <input type="text" id="work-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="work-genre">Genre :</label>
+                    <input type="text" id="work-genre" placeholder="Ex: Thriller, Romance, Science-fiction..." required>
+                </div>
+                <div class="form-group">
+                    <label for="work-synopsis">Synopsis :</label>
+                    <textarea id="work-synopsis" placeholder="Décrivez votre œuvre en quelques phrases..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="work-pdf">Fichier PDF :</label>
+                    <input type="file" id="work-pdf" accept=".pdf" required>
+                    <small>Formats acceptés : PDF uniquement</small>
+                </div>
+                <div class="form-group">
+                    <label for="work-image">Image de couverture (optionnelle) :</label>
+                    <input type="url" id="work-image" placeholder="https://exemple.com/image.jpg">
+                    <small>URL d'une image en ligne</small>
+                </div>
+                <input type="hidden" id="work-category">
+                <button type="submit" class="submit-btn">Publier</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DÉTAIL ŒUVRE -->
+    <div id="work-modal" class="modal" style="display: none;">
+        <div class="modal-content large">
+            <span class="close" onclick="closeModal('work-modal')">&times;</span>
+            <div class="work-detail-content" id="work-detail-content">
+                <!-- Contenu généré dynamiquement -->
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
